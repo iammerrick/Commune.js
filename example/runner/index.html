@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="//localhost:3000/vendor/q.js"></script>
+  <script src="//localhost:3000/Commune.js"></script>
+</head>
+<body>
+  <iframe src="//localhost:3002/"></iframe>
+  <script>
+  window.addEventListener('message', function(e) {
+      if (e.data.message === 'authorize') {
+        e.source.postMessage({
+          message: {
+            status: 200
+          },
+          guid: e.data.guid
+        }, '*');
+      }
+  });
+  </script>
+</body>
+</html>

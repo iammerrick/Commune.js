@@ -24,11 +24,12 @@ function guid() {
  */
 function Commune(options) {
   options = options || {};
-  this.channel = options.channel || window;
+  this.channel = options.channel || window.parent;
+  this.receiver = options.receiver || window;
   this.target = options.target || '*';
   this.tasks = {};
   
-  this.channel.addEventListener('message', this.dispatch.bind(this), false);
+  this.receiver.addEventListener('message', this.dispatch.bind(this), false);
 }
 
 /**

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="//localhost:3000/vendor/q.js"></script>
+  <script src="//localhost:3000/Commune.js"></script>
+</head>
+<body>
+<script>
+var channel = new Commune();
+channel
+  .message('authorize')
+  .then(function(response) {
+    console.log(response);
+  })
+  .catch(function(err) {
+    console.log(err);
+  });
+</script>
+</body>
+</html>

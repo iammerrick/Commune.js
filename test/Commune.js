@@ -2,9 +2,11 @@ describe('Commune', function() {
   var instance, channel;
 
   beforeEach(function() {
-    channel = jasmine.createSpyObj('channel', ['postMessage', 'addEventListener']);
+    channel = jasmine.createSpyObj('channel', ['postMessage']);
+    receiver = jasmine.createSpyObj('receiver', ['addEventListener']);
     instance = new Commune({
-      channel: channel
+      channel: channel,
+      receiver: receiver
     });
   });
 
@@ -14,7 +16,7 @@ describe('Commune', function() {
     });
 
     it('should listen for the message event', function() {
-      expect(channel.addEventListener).toHaveBeenCalledWith('message', jasmine.any(Function), false);
+      expect(receiver.addEventListener).toHaveBeenCalledWith('message', jasmine.any(Function), false);
     });
 
     it('should allow me to override the target', function() {
