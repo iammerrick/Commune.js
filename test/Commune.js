@@ -16,7 +16,8 @@ describe('Commune', function() {
     });
 
     it('should listen for the message event', function() {
-      expect(receiver.addEventListener).toHaveBeenCalledWith('message', jasmine.any(Function), false);
+      expect(receiver.addEventListener)
+        .toHaveBeenCalledWith('message', jasmine.any(Function), false);
     });
 
     it('should allow me to override the target', function() {
@@ -26,7 +27,8 @@ describe('Commune', function() {
       });
 
       targeted.message('targeted');
-      expect(channel.postMessage).toHaveBeenCalledWith(jasmine.any(Object), 'http://domo.com');
+      expect(channel.postMessage)
+        .toHaveBeenCalledWith(jasmine.any(Object), 'http://domo.com');
     });
   });
 
@@ -37,41 +39,36 @@ describe('Commune', function() {
 
     it('should overload a string into the object', function() {
       instance.message('attempt');
-      expect(channel.postMessage).toHaveBeenCalledWith(jasmine.objectContaining({
-        message: 'attempt'
-      }), '*');
+      expect(channel.postMessage)
+        .toHaveBeenCalledWith(jasmine.objectContaining({
+          message: 'attempt'
+        }), '*');
     });
   });
 
   describe('signed messages', function() {
     it('should sign messages with a valid guid', function() {
       instance.message('some message');
-      expect(channel.postMessage.mostRecentCall.args[0].guid).toMatch(/([^\-]*\-){4}/);
+      expect(channel.postMessage.calls.mostRecent().args[0].guid)
+        .toMatch(/([^\-]*\-){4}/);
     });
   });
 
   describe('dispatch', function() {
-    it('should dispatch to the correct promise', function() {
-      var done = false;
+    it('should dispatch to the correct promise', function(done) {
+      var promise = instance.message('ping');
 
-      runs(function(){
-        var promise = instance.message('ping');
-        instance.dispatch({
-          data: {
-            message: 'pong',
-            guid: channel.postMessage.mostRecentCall.args[0].guid
-          }
-        });
-
-        promise.then(function(response) {
-          expect(response).toEqual('pong');
-          done = true;
-        });
+      instance.dispatch({
+        data: {
+          message: 'pong',
+          guid: channel.postMessage.calls.mostRecent().args[0].guid
+        }
       });
 
 
-      waitsFor(function() {
-        return done;
+      promise.then(function(response) {
+        expect(response).toEqual('pong');
+        done();
       });
     });
   });
